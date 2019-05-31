@@ -15,9 +15,21 @@
  */
 abstract class FundamentalPHP {
 
+    /**
+     * アクセス出来ない、または未定義のメソッドをコールしようとした際に例外を投げる
+     * Throw an exception when trying to call an inaccessible or undefined method
+     * 
+     * @param string $name
+     * @param mixed $arguments
+     * @throws MethodInaccessibleException
+     * @throws MethodUndefinedException
+     */
     public function __call($name, $arguments)
     {
-        
+        if (in_array($name, get_class_methods($this)))
+            throw new MethodInaccessibleException(get_class($this), $name);
+        else
+            throw new MethodUndefinedException(get_class($this), $name);
     }
 
     /**
