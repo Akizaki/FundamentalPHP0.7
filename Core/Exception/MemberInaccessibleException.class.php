@@ -4,7 +4,7 @@
  * MemberInaccessibleException::Exception
  * 
  * 指定されたメンバ変数がアクセス不可能だった場合、この例外が投げられる
- * 
+ * This exception is thrown if the specified member variable is inaccessible
  * 
  * @category  FundamentalPHP
  * @package   Core/Exception
@@ -43,7 +43,8 @@ class MemberInaccessibleException extends Exception {
 
     /**
      * この例外が投げられたクラス名とメンバ変数名を[クラス::メンバ]のフォーマットで文字列として取得する
-     * Get the class name and member variable name　where this exception is thrown as a string in the format of [class::member]
+     * Get the class name and member variable name 
+     * where this exception is thrown as a string in the format of [class::member]
      * 
      * @return string
      */
