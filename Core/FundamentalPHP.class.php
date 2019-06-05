@@ -3,7 +3,7 @@
 /**
  * FundamentalPHP
  * 
- * @tutorial 
+ * @tutorial
  * このクラスが継承されたクラスに対しては、そのインスタンス生成後に新たなプロパティをセットする事は出来ない
  * また、存在しないもしくはアクセス出来ないプロパティ、メソッドに対して参照する事も出来ない
  * マジックメソッド(__get/__set/__call)はアクセス不可(存在しないか未定義)に対して処理が行われた際に実行されるため
@@ -19,8 +19,10 @@ abstract class FundamentalPHP {
      * アクセス出来ない、または未定義のメソッドをコールしようとした際に例外を投げる
      * Throw an exception when trying to call an inaccessible or undefined method
      * 
+     * @link https://www.php.net/manual/ja/language.oop5.overloading.php#object.call
+     * 
      * @param string $name
-     * @param mixed $arguments
+     * @param array $arguments
      * @throws MethodInaccessibleException
      * @throws MethodUndefinedException
      */
@@ -35,6 +37,8 @@ abstract class FundamentalPHP {
     /**
      * アクセス出来ない、または未定義のメンバ変数に値をセットしようとした際に例外を投げる
      * Throw an exception when trying to set a value to an inaccessible or undefined member variable
+     * 
+     * @link https://www.php.net/manual/ja/language.oop5.overloading.php#object.set
      * 
      * @param string $name
      * @param mixed $value
@@ -53,6 +57,8 @@ abstract class FundamentalPHP {
      * アクセス出来ない、または定義されていないメンバ変数を参照しようとした際に例外を投げる
      * Throw an exception when trying to reference a member variable that can not be accessed or defined
      * 
+     * @link https://www.php.net/manual/ja/language.oop5.overloading.php#object.get
+     * 
      * @param string $name
      * @throws MemberInaccessibleException
      * @throws MemberUndefinedException
@@ -66,6 +72,7 @@ abstract class FundamentalPHP {
     }
 
     /**
+     * 引数の型が配列かArrayObjectのインスタンスであるかを確認する
      * Check whether argument type is array or ArrayObject instance
      * 
      * @param string $methodName
