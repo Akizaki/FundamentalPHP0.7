@@ -10,6 +10,10 @@ class Response {
     protected $isEnd;
     protected $headersSent;
 
+    /**
+     * 
+     * @param type $debug_mode
+     */
     public function __construct($debug_mode = false)
     {
         $this->statusCode = 200;
