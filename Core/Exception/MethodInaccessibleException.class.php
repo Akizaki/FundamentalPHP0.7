@@ -17,7 +17,7 @@ class MethodInaccessibleException extends BadMethodCallException {
 
     /**
      * 指定されたメソッドがアクセス不可能な場合、この例外が投げられる
-     * This exception is thrown if the specified method is inaccessible
+     * This exception is thrown if the called method can not be accessed
      * 
      * @param string $className
      * @param string $methodName
@@ -32,14 +32,14 @@ class MethodInaccessibleException extends BadMethodCallException {
     }
 
     /**
-     * この例外が投げられた際に出力されるエラーメッセージを取得する
      * Get an error message that is output when this exception is thrown
+     * この例外が投げられた際に出力されるエラーメッセージを取得する
      * 
      * @return string
      */
     public function getErrorMessage()
     {
-        return sprintf("The called method '%s' is not accessible,'%s'", $this->getInaccessibleMethod(), $this->getErrorInfo());
+        return sprintf("The called method '%s' can not be accessed,'%s'", $this->getInaccessibleMethod(), $this->getErrorInfo());
     }
 
     /**
@@ -51,7 +51,7 @@ class MethodInaccessibleException extends BadMethodCallException {
      */
     public function getInaccessibleMethod()
     {
-        return join("::", [ucfirst($this->getClass()), $this->getMethod()]);
+        return join("::", [$this->getClass(), $this->getMethod()]);
     }
 
     /**

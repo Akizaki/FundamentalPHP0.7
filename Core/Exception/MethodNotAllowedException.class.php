@@ -7,6 +7,7 @@
  * This exception is thrown when a forbidden HTTP method is called
  * 
  * @todo この例外クラスではメンバ「_forbiddenMethod」がHTTPメソッドかそうでないかは判断していない
+ * 
  * @category  FundamentalPHP
  * @package   Core/Exception
  * @copyright 
@@ -18,8 +19,6 @@ class MethodNotAllowedException extends BadMethodCallException {
     /**
      * 禁止されているHTTPメソッドが呼び出された際、この例外が投げられる
      * This exception is thrown when a forbidden HTTP method is called
-     * 
-     * @todo この例外クラスではメンバ「_forbiddenMethod」がHTTPメソッドかそうでないかは判断していない
      * 
      * @param string $forbiddenMethodName
      * @param string $errorInfo
@@ -39,12 +38,12 @@ class MethodNotAllowedException extends BadMethodCallException {
      */
     public function getErrorMessage()
     {
-        return sprintf("Method '%s' is not allowed,'%s'", strtoupper($this->getForbiddenMethod()), $this->getErrorInfo());
+        return sprintf("The called method '%s' is forbidden to use,'%s'", strtoupper($this->getForbiddenMethod()), $this->getErrorInfo());
     }
 
     /**
-     * この例外が投げられたHTTPメソッド名を取得する
-     * Get the name of the HTTP method for which this exception was thrown
+     * この例外が投げられた禁止されているメソッド名を取得する
+     * Get the forbidden method name for which this exception was thrown
      * 
      * @return string
      */

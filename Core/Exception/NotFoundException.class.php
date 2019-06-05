@@ -39,7 +39,7 @@ class NotFoundException extends RuntimeException {
      */
     public function getErrorMessage()
     {
-        return sprintf("The PathInfo '%s' is not found,'%s'", $this->getMissingPathInfo(), $this->getErrorInfo());
+        return sprintf("The Path '%s' is not found,'%s'", $this->getMissingPathInfo(), $this->getErrorInfo());
     }
 
     /**

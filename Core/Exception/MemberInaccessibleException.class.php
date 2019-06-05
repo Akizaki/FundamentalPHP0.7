@@ -50,7 +50,7 @@ class MemberInaccessibleException extends Exception {
      */
     public function getInaccessibleMember()
     {
-        return join("::", [ucfirst($this->getClass()), $this->getMember()]);
+        return join("::", [$this->getClass(), $this->getMember()]);
     }
 
     /**

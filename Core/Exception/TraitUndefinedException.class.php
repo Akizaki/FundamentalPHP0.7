@@ -29,8 +29,8 @@ class TraitUndefinedException extends Exception {
     }
 
     /**
-     * この例外が投げられた際に出力されるエラーメッセージを取得する
      * Get an error message that is output when this exception is thrown
+     * この例外が投げられた際に出力されるエラーメッセージを取得する
      * 
      * @return string
      */

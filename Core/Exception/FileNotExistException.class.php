@@ -51,8 +51,8 @@ class FileNotExistException extends Exception {
     }
 
     /**
-     * この例外が投げられたファイル名もしくはディレクトリ名を取得する
-     * Get the file name or directory name where this exception was thrown
+     * この例外が投げられた際の追加情報を取得する
+     * Get additional information when this exception is thrown
      * 
      * @return string
      */

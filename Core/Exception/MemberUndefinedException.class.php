@@ -50,7 +50,7 @@ class MemberUndefinedException extends Exception {
      */
     public function getUndefinedMember()
     {
-        return join("::", [ucfirst($this->getClass()), $this->getMember()]);
+        return join("::", [$this->getClass(), $this->getMember()]);
     }
 
     /**
