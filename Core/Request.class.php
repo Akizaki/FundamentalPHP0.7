@@ -8,8 +8,6 @@
  * @category FundamentalPHP
  * @package  Core
  * @copyright
- * @link https://github.com/yumezouWebTeam/FundamentalPHP0.8.1
- * @link https://github.com/yumezouWebTeam/FundamentalPHP0.8.1/blob/master/Core/Request.class.php
  */
 class Request extends FundamentalPHP {
 
@@ -17,13 +15,32 @@ class Request extends FundamentalPHP {
 
     /**
      * 
-     * @param null/array $forbiddenMethods
+     * 
+     * @param array $forbiddenMethods
      */
     public function __construct($forbiddenMethods = null)
     {
-        /* TODO::要テスト $this->_http_methods = ["GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS", "PATCH"]; */
+        $this->_http_methods = ["GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS", "PATCH"];
         $this->_forbiddenMethods = is_array($forbiddenMethods) ? array_map("strtoupper", $forbiddenMethods) : [];
         $this->_filterTypeList = function_exists("filter_list") ? array_map("strtoupper", filter_list()) : [];
+    }
+
+    /**
+     * 
+     * @return boolean
+     */
+    public function isPost()
+    {
+        return strtoupper($_SERVER["REQUEST_METHOD"]) === "POST";
+    }
+
+    /**
+     * 
+     * @return boolean
+     */
+    public function isSsl()
+    {
+        return isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] === "on";
     }
 
     /**
@@ -34,6 +51,104 @@ class Request extends FundamentalPHP {
     {
         return isset($_SERVER["HTTP_X_REQUESTED_WITH"]) &&
                 strtoupper($_SERVER["HTTP_X_REQUESTED_WITH"]) === strtoupper("xmlhttprequest");
+    }
+
+    /**
+     * @todo _forbiddenMethodsに対してHTTTPメソッドであるかどうか判定する必要がある
+     */
+    public function isHttpRequestMethod()
+    {
+        return;
+    }
+
+    /**
+     * 
+     * @param string $request_method
+     * @return boolean
+     * @throws MethodNotAllowedException
+     */
+    public function is($request_method)
+    {
+        if (in_array(strtoupper($request_method), $this->getForbiddenMethods()))
+            throw new MethodNotAllowedException(strtoupper($request_method));
+        if ($request_method === "ssl")
+            return $this->isSsl();
+        if ($request_method === "ajax" || $request_method === "xmlhttprequest")
+            return $this->isXmlHttpRequest();
+        return strtoupper($_SERVER["REQUEST_METHOD"]) === strtoupper($request_method);
+    }
+
+    /**
+     * 
+     * @param string $name
+     * @param mixed $__FILTER 
+     * <pre>See below for available filter types</pre>
+     * @link https://www.php.net/manual/ja/filter.filters.php
+     * @return mixed
+     */
+    public function getPost($name, $__FILTER = null)
+    {
+        $__FILTER = in_array(strtoupper($__FILTER), $this->getFilterTypeList()) ?
+                strtoupper($__FILTER) : FILTER_UNSAFE_RAW;
+        if (isset($_POST[$name]))
+            return function_exists("filter_input") ? filter_input(INPUT_POST, $name, $__FILTER) : $_POST[$name];
+        return null;
+    }
+
+    /**
+     * 
+     * @param string $name
+     * @param mixed $__FILTER 
+     * <pre>See below for available filter types</pre>
+     * @link https://www.php.net/manual/ja/filter.filters.php
+     * @return mixed
+     */
+    public function getQuery($name, $__FILTER = null)
+    {
+        $__FILTER = in_array(strtoupper($__FILTER), $this->getFilterTypeList()) ?
+                strtoupper($__FILTER) : FILTER_UNSAFE_RAW;
+        if (isset($_GET[$name]))
+            return function_exists("filter_input") ? filter_input(INPUT_GET, $name, $__FILTER) : $_GET[$name];
+        return null;
+    }
+
+    /**
+     * 
+     * @return array
+     */
+    public function getForbiddenMethods()
+    {
+        return (array) $this->_forbiddenMethods;
+    }
+
+    /**
+     * 
+     * @return array
+     */
+    public function getFilterTypeList()
+    {
+        return (array) $this->_filterTypeList;
+    }
+
+    /**
+     * 
+     * @return array
+     */
+    public function getHeaders()
+    {
+        return function_exists("apache_request_headers") ? apache_request_headers() : [];
+    }
+
+    /**
+     * 
+     * @param string $name
+     * @return mixed
+     */
+    public function getHeader($name)
+    {
+        if (function_exists("apache_request_headers"))
+            return array_key_exists($name, apache_request_headers()) ? apache_request_headers()[$name] : "";
+        return null /*  TODO::false? */;
     }
 
     /**
