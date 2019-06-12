@@ -76,9 +76,12 @@ abstract class Controller {
 
     /**
      * 
+     * @return type
+     * @throws NotFoundException
      */
     public function dispatch()
     {
+        $this->_actionName = explode("/", $this->_request->getPathInfo())[2];
         if (!is_callable([$this, $this->_actionName]))
             throw new NotFoundException($this->_controllerName, $this->_actionName);
         $datetime = $this->getDate();
@@ -99,7 +102,7 @@ abstract class Controller {
     }
 
     /**
-     * 
+     * @todo ここでアクションが見つからなかった場合にfalseを返すから例外のときにアクション名が見つからない
      * @return mixed 
      */
     protected function _findMethod()
