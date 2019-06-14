@@ -71,7 +71,7 @@ class ClassUndefinedException extends Exception {
      */
     public function __toString()
     {
-        return sprintf("[Exception '%s' with message '%s' in '%s]", __CLASS__, $this->getErrorMessage(), join(":", [$this->getFile(), $this->getLine()]));
+        return sprintf("Exception '%s' with message '%s' in '%s'", __CLASS__, $this->getErrorMessage(), join(":", [$this->getFile(), $this->getLine()]));
     }
 
 }
