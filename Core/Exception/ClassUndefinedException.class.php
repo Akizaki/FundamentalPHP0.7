@@ -6,6 +6,7 @@
  * 指定されたクラスが未定義だった場合、この例外が投げられる
  * This exception is thrown if the specified class is undefined
  * 
+ * @link 
  * @category  FundamentalPHP
  * @package   Core/Exception
  * @copyright
@@ -36,7 +37,7 @@ class ClassUndefinedException extends Exception {
      */
     public function getErrorMessage()
     {
-        return sprintf("Class '%s' is not defined,'%s'", ucfirst($this->getClass()), $this->getErrorInfo());
+        return sprintf("class '%s' is not defined,'%s'", ucfirst($this->getClass()), $this->getErrorInfo());
     }
 
     /**
@@ -70,7 +71,7 @@ class ClassUndefinedException extends Exception {
      */
     public function __toString()
     {
-        return join("::", [__CLASS__, $this->getErrorMessage()]);
+        return sprintf("Exception '%s' with message '%s' in '%s:%s", get_class($this), $this->getErrorMessage(), $this->getFile(), $this->getLine());
     }
 
 }
