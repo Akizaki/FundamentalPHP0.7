@@ -37,7 +37,7 @@ class ClassUndefinedException extends Exception {
      */
     public function getErrorMessage()
     {
-        return sprintf("class '%s' is not defined,'%s'", ucfirst($this->getClass()), $this->getErrorInfo());
+        return sprintf("Class '%s' is not defined,'%s'", ucfirst($this->getClass()), $this->getErrorInfo());
     }
 
     /**
