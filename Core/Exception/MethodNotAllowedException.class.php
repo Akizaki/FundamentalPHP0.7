@@ -72,7 +72,7 @@ class MethodNotAllowedException extends BadMethodCallException {
      */
     public function __toString()
     {
-        return join("::", [__CLASS__, $this->getErrorMessage()]);
+        return sprintf("Exception '%s' with message '%s' in '%s'", __CLASS__, $this->getErrorMessage(), join(":", [$this->getFile(), $this->getLine()]));
     }
 
 }
