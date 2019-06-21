@@ -39,7 +39,7 @@ class MethodInaccessibleException extends BadMethodCallException {
      */
     public function getErrorMessage()
     {
-        return sprintf("'%s' is not accessible,'%s'", $this->getInaccessibleMethod(), $this->getErrorInfo());
+        return sprintf("The called method '%s' is not Inaccessible,'%s'", $this->getInaccessibleMethod(), $this->getErrorInfo());
     }
 
     /**
