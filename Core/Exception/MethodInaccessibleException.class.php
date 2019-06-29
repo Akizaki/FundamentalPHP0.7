@@ -45,13 +45,13 @@ class MethodInaccessibleException extends BadMethodCallException {
     /**
      * この例外が投げられたクラス名とメンバ変数名を[クラス::メソッド]のフォーマットで文字列として取得する
      * Get the class name and member variable name 
-     * where this exception is thrown as a string in the format of [class :: method]
+     * where this exception is thrown as a string in the format of [Class :: method]
      * 
      * @return string
      */
     public function getInaccessibleMethod()
     {
-        return join("::", [$this->getClass(), $this->getMethod()]);
+        return join("::", [ucfirst($this->getClass()), $this->getMethod()]);
     }
 
     /**
