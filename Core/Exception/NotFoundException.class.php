@@ -32,8 +32,8 @@ class NotFoundException extends RuntimeException {
     }
 
     /**
-     * この例外が投げられた際に出力されるエラーメッセージを取得する
      * Get an error message that is output when this exception is thrown
+     * この例外が投げられた際に出力されるエラーメッセージを取得する
      * 
      * @return string
      */
@@ -95,7 +95,7 @@ class NotFoundException extends RuntimeException {
      */
     public function __toString()
     {
-        return join("::", [__CLASS__, $this->getErrorMessage()]);
+        return sprintf("Exception '%s' with message '%s' in '%s'", __CLASS__, $this->getErrorMessage(), join(":", [$this->getFile(), $this->getLine()]));
     }
 
 }
