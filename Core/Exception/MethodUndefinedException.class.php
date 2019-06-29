@@ -10,7 +10,7 @@
  * @package   Core/Exception
  * @copyright 
  */
-class MethodUndefinedException extends Exception {
+class MethodUndefinedException extends BadMethodCallException {
 
     protected $_class, $_method, $_errorInfo;
 
@@ -44,13 +44,13 @@ class MethodUndefinedException extends Exception {
     /**
      * この例外が投げられたクラス名とメンバ変数名を[クラス::メソッド]のフォーマットで文字列として取得する
      * Get the class name and member variable name 
-     * where this exception is thrown as a string in the format of [class :: method]
+     * where this exception is thrown as a string in the format of [Class :: method]
      * 
      * @return string
      */
     public function getUndefinedMethod()
     {
-        return join("::", [$this->getClass(), $this->getMethod()]);
+        return join("::", [ucfirst($this->getClass()), $this->getMethod()]);
     }
 
     /**
@@ -95,7 +95,7 @@ class MethodUndefinedException extends Exception {
      */
     public function __toString()
     {
-        return join("::", [__CLASS__, $this->getErrorMessage()]);
+        return sprintf("Exception '%s' with message '%s' in '%s'", __CLASS__, $this->getErrorMessage(), join(":", [$this->getFile(), $this->getLine()]));
     }
 
 }
