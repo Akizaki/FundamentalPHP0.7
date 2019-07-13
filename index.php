@@ -1,34 +1,6 @@
 <?php
-/* FundamentalPHP.classの単体テスト
-
-  $files = [
-  'Core/FundamentalPHP.class.php',
-  'Core/Request.class.php',
-  'Core/Exception/MemberInaccessibleException.class.php',
-  'Core/Exception/MemberUndefinedException.class.php',
-  'Core/Exception/MethodInaccessibleException.class.php',
-  'Core/Exception/MethodUndefinedException.class.php',
-  'Core/Request.class.php'
-  ];
-
-  function _requires(array $file_list)
-  {
-  $callback = function ($file) {
-  require_once $file;
-  };
-  return array_map($callback, array_values($file_list));
-  }
-
-  _requires($files);
-
-  $request = new Request();
-  var_dump($request->_test);
-  die();
- */
-
+require 'Core/Exception/MethodInaccessibleException.class.php';
 require 'Core/Loader.class.php';
-
-
 
 
 $dirs = [

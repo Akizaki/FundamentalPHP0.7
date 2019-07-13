@@ -8,6 +8,9 @@
  * @category FundamentalPHP
  * @package  Core
  * @copyright
+ * @link https://github.com/yumezouWebTeam/FundamentalPHP0.8.1
+ * @link https://github.com/yumezouWebTeam/FundamentalPHP0.8.1/blob/master/Core/Request.class.php
+ * @author tatsuya.osada
  */
 class Request extends FundamentalPHP {
 
@@ -15,12 +18,11 @@ class Request extends FundamentalPHP {
 
     /**
      * 
-     * 
-     * @param array $forbiddenMethods
+     * @param null/array $forbiddenMethods
      */
     public function __construct($forbiddenMethods = null)
     {
-        $this->_http_methods = ["GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS", "PATCH"];
+        /* TODO::要テスト $this->_http_methods = ["GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS", "PATCH"]; */
         $this->_forbiddenMethods = is_array($forbiddenMethods) ? array_map("strtoupper", $forbiddenMethods) : [];
         $this->_filterTypeList = function_exists("filter_list") ? array_map("strtoupper", filter_list()) : [];
     }
@@ -54,14 +56,6 @@ class Request extends FundamentalPHP {
     }
 
     /**
-     * @todo _forbiddenMethodsに対してHTTTPメソッドであるかどうか判定する必要がある
-     */
-    public function isHttpRequestMethod()
-    {
-        return;
-    }
-
-    /**
      * 
      * @param string $request_method
      * @return boolean
@@ -69,65 +63,57 @@ class Request extends FundamentalPHP {
      */
     public function is($request_method)
     {
-        if (in_array(strtoupper($request_method), $this->getForbiddenMethods()))
+        if (in_array(strtoupper($request_method), $this->_forbiddenMethods))
             throw new MethodNotAllowedException(strtoupper($request_method));
         if ($request_method === "ssl")
             return $this->isSsl();
         if ($request_method === "ajax" || $request_method === "xmlhttprequest")
             return $this->isXmlHttpRequest();
-        return strtoupper($_SERVER["REQUEST_METHOD"]) === strtoupper($request_method);
+        return strtoupper($request_method) === strtoupper($_SERVER["REQUEST_METHOD"]);
     }
 
     /**
      * 
      * @param string $name
-     * @param mixed $__FILTER 
+     * @param string || null $__FILTER__
      * <pre>See below for available filter types</pre>
      * @link https://www.php.net/manual/ja/filter.filters.php
      * @return mixed
      */
-    public function getPost($name, $__FILTER = null)
+    public function getPost($name, $__FILTER__ = null)
     {
-        $__FILTER = in_array(strtoupper($__FILTER), $this->getFilterTypeList()) ?
-                strtoupper($__FILTER) : FILTER_UNSAFE_RAW;
+        $__FILTER__ = in_array(strtoupper($__FILTER__), $this->_filterTypeList) ? strtoupper($__FILTER__) : FILTER_UNSAFE_RAW;
         if (isset($_POST[$name]))
-            return function_exists("filter_input") ? filter_input(INPUT_POST, $name, $__FILTER) : $_POST[$name];
+            return function_exists("filter_input") ? filter_input(INPUT_POST, $name, $__FILTER__) : $_POST[$name];
         return null;
     }
 
     /**
      * 
      * @param string $name
-     * @param mixed $__FILTER 
+     * @param string || null $__FILTER__
      * <pre>See below for available filter types</pre>
      * @link https://www.php.net/manual/ja/filter.filters.php
      * @return mixed
      */
-    public function getQuery($name, $__FILTER = null)
+    public function getQuery($name, $__FILTER__ = null)
     {
-        $__FILTER = in_array(strtoupper($__FILTER), $this->getFilterTypeList()) ?
-                strtoupper($__FILTER) : FILTER_UNSAFE_RAW;
+        $__FILTER__ = in_array(strtoupper($__FILTER__), $this->_filterTypeList) ? strtoupper($__FILTER__) : FILTER_UNSAFE_RAW;
         if (isset($_GET[$name]))
-            return function_exists("filter_input") ? filter_input(INPUT_GET, $name, $__FILTER) : $_GET[$name];
+            return function_exists("filter_input") ? filter_input(INPUT_GET, $name, $__FILTER__) : $_GET[$name];
         return null;
     }
 
     /**
      * 
-     * @return array
+     * @param string $name
+     * @return mixed
      */
-    public function getForbiddenMethods()
+    public function getHeader($name = null)
     {
-        return (array) $this->_forbiddenMethods;
-    }
-
-    /**
-     * 
-     * @return array
-     */
-    public function getFilterTypeList()
-    {
-        return (array) $this->_filterTypeList;
+        if (function_exists("apache_request_headers"))
+            return array_key_exists($name, apache_request_headers()) ? apache_request_headers()[$name] : null;
+        return null;
     }
 
     /**
@@ -137,18 +123,6 @@ class Request extends FundamentalPHP {
     public function getHeaders()
     {
         return function_exists("apache_request_headers") ? apache_request_headers() : [];
-    }
-
-    /**
-     * 
-     * @param string $name
-     * @return mixed
-     */
-    public function getHeader($name)
-    {
-        if (function_exists("apache_request_headers"))
-            return array_key_exists($name, apache_request_headers()) ? apache_request_headers()[$name] : "";
-        return null /*  TODO::false? */;
     }
 
     /**

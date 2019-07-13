@@ -44,13 +44,13 @@ class MemberInaccessibleException extends Exception {
     /**
      * この例外が投げられたクラス名とメンバ変数名を[クラス::メンバ]のフォーマットで文字列として取得する
      * Get the class name and member variable name 
-     * where this exception is thrown as a string in the format of [class::member]
+     * where this exception is thrown as a string in the format of [Class::member]
      * 
      * @return string
      */
     public function getInaccessibleMember()
     {
-        return join("::", [$this->getClass(), $this->getMember()]);
+        return join("::", ucfirst($this->getClass()), $this->getMember());
     }
 
     /**

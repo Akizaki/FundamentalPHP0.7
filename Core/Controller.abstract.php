@@ -81,7 +81,6 @@ abstract class Controller {
      */
     public function dispatch()
     {
-        $this->_actionName = explode("/", $this->_request->getPathInfo())[2];
         if (!is_callable([$this, $this->_actionName]))
             throw new NotFoundException($this->_controllerName, $this->_actionName);
         $datetime = $this->getDate();
