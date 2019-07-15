@@ -210,7 +210,8 @@ class Request extends FundamentalPHP {
      * Filter and get the parameters of request method POST
      * 
      * @param string $name
-     * @param string $__FILTER__
+     * @param defined $__FILTER__
+     * @explain <pre>引数のフィルタ型はPHPで定義されているものに限る</pre>
      * <pre>See below for available filter types</pre>
      * @link https://www.php.net/manual/ja/filter.filters.php
      * @return mixed
@@ -228,7 +229,8 @@ class Request extends FundamentalPHP {
      * Filter and get the query parameter of request method GET
      * 
      * @param string $name
-     * @param string || null $__FILTER__
+     * @param defined $__FILTER__ 
+     * @explain <pre>引数のフィルタ型はPHPで定義されているものに限る</pre>
      * <pre>See below for available filter types</pre>
      * @link https://www.php.net/manual/ja/filter.filters.php
      * @return mixed
