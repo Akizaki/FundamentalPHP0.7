@@ -1,5 +1,4 @@
 <?php
-require 'Core/Exception/MethodInaccessibleException.class.php';
 require 'Core/Loader.class.php';
 
 
@@ -28,9 +27,11 @@ $extensions = [
 $loader = new Loader($dirs, $extensions);
 $loader->register();
 
-$request = new Request(["GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS", "PATCH"]);
-var_dump($request->getHeaders());
-die();
+/*
+  $request = new Request(["GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS", "PATCH"]);
+  $request->setFilterTypes([FILTER_SANITIZE_STRIPPED, FILTER_SANITIZE_STRING]);
+  var_dump($request->getFilterTypeList());
+ */
 
 $controller = new ApplicationController(true, "Mysqli");
 $controller->dispatch();
