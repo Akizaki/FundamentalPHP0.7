@@ -28,6 +28,9 @@ $extensions = [
 $loader = new Loader($dirs, $extensions);
 $loader->register();
 
+$request = new Request(["GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS", "PATCH"]);
+var_dump($request->getHeaders());
+die();
 
 $controller = new ApplicationController(true, "Mysqli");
 $controller->dispatch();

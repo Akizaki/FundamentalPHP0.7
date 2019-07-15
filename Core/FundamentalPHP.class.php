@@ -4,21 +4,21 @@
  * FundamentalPHP
  * 
  * <pre>このクラスが継承されたクラスに対しては、そのインスタンス生成後に新たなプロパティをセットする事は出来ない
- * また、存在しないもしくはアクセス出来ないプロパティ、メソッドに対して参照する事も出来ない
- * マジックメソッド(__get/__set/__call)はアクセス不可(存在しないか未定義)に対して処理が行われた際に実行されるため
+ * また、存在しないもしくはアクセス出来ないプロパティ、メソッドに対して参照する事も出来ない</pre>
+ * 
+ * <pre>マジックメソッド(__get/__set/__call)はアクセス不可(存在しないか未定義)に対して処理が行われた際に実行されるため
  * そこで例外を投げる事でオブジェクトを堅牢に保つ事が出来る</pre>
  * 
  * 
  * @category  FundamentalPHP
  * @package   Core
  * @copyright  
- * @link https://github.com/yumezouWebTeam/FundamentalPHP0.8.1
- * @link https://github.com/yumezouWebTeam/FundamentalPHP0.8.1/blob/master/Core/FundamentalPHP.class.php
  * @author tatsuya.osada
  */
 abstract class FundamentalPHP {
 
     /**
+     * アクセスできない、または区別されていないメソッドを呼び出そうとした例外をスローする
      * Throw exception that was going to call method which cannot be accessed or not difined 
      * 
      * @param string $name
@@ -35,7 +35,8 @@ abstract class FundamentalPHP {
     }
 
     /**
-     * Throw exception that was going to get value by field which cannot be accessed or not difined 
+     * アクセスできない、または区別されていないフィールドに値を取得しようとしていた例外をスローする
+     * Throw exception that was going to get value to field which cannot be accessed or not difined 
      * 
      * @param string $name
      * @param mixed $value
@@ -51,7 +52,8 @@ abstract class FundamentalPHP {
     }
 
     /**
-     * Throw exception that was going to set value to field which cannot be accessed or not difined
+     * アクセスできない、または区別されていないフィールドに値を取得しようとしていた例外をスローする
+     * Throw exception that was going to get value to field which cannot be accessed or not difined 
      * 
      * @param string $name
      * @throws MemberInaccessibleException
