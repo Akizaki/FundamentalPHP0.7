@@ -31,13 +31,19 @@ class Request extends FundamentalPHP {
             });
         });
 
+
         /**
          * 
          */
         $this->_filterTypeList = array_merge([
-            FILTER_SANITIZE_EMAIL, FILTER_SANITIZE_ENCODED, FILTER_SANITIZE_SPECIAL_CHARS,
-            FILTER_SANITIZE_FULL_SPECIAL_CHARS, FILTER_SANITIZE_URL, FILTER_VALIDATE_BOOLEAN,
-            FILTER_VALIDATE_EMAIL, FILTER_VALIDATE_IP,
+            FILTER_SANITIZE_EMAIL,
+            FILTER_SANITIZE_ENCODED,
+            FILTER_SANITIZE_SPECIAL_CHARS,
+            FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+            FILTER_SANITIZE_URL,
+            FILTER_VALIDATE_BOOLEAN,
+            FILTER_VALIDATE_EMAIL,
+            FILTER_VALIDATE_IP,
                 ], array_map("strtoupper", filter_list()));
     }
 
@@ -114,7 +120,9 @@ class Request extends FundamentalPHP {
      */
     public function setForbiddenMethod($method_name)
     {
-        $this->_forbiddenMethods[] = (string) strtoupper($method_name);
+        if (!in_array(strtoupper($method_name), $this->_forbiddenMethods))
+            $this->_forbiddenMethods[] = $method_name;
+        return;
     }
 
     /**
@@ -126,18 +134,31 @@ class Request extends FundamentalPHP {
      */
     public function setForbiddenMethods(array $methods)
     {
-        return array_map(function($method) {
-            return is_string($method) && $this->_forbiddenMethods[] = strtoupper($method);
-        }, $methods);
+        return array_map("self::setForbiddenMethod", $methods);
     }
 
     /**
+     * このクラスで定義されているHTTPリクエストメソッドの一覧を配列で取得する
+     * Get list of defined HTTP request methods as array
      * 
-     * @param string $http_method
+     * @return array
      */
-    public function setHttpMethod($http_method)
+    public function getHttpMethods()
     {
-        /* TODO::Not Implemented  */
+        return (array) $this->_http_methods;
+    }
+
+    /**
+     * このクラスで定義されているHTTPリクエストメソッドに値を追加する
+     * Set value to HTTP request method defined in this class
+     * 
+     * @param string $method_name
+     */
+    public function setHttpMethod($method_name)
+    {
+        if (!in_array(strtoupper($method_name), $this->_http_methods))
+            $this->_http_methods[] = strtoupper($method_name);
+        return;
     }
 
     /**
@@ -146,7 +167,7 @@ class Request extends FundamentalPHP {
      */
     public function setHttpMethods(array $http_method)
     {
-        /* TODO::Not Implemented  */
+        return array_map("self::setHttpMethod", $http_method);
     }
 
     /**
@@ -161,21 +182,27 @@ class Request extends FundamentalPHP {
     }
 
     /**
+     * 利用可能としたいフィルタの型を追加する
+     * Add the type of filter you want to make available
      * 
      * @param string $filter_type
      */
     public function setFilterType($filter_type)
     {
-        /* TODO::Not Implemented  */
+        if (!in_array(strtoupper($filter_type), $this->getFilterTypeList()))
+            $this->_filterTypeList[] = strtoupper($filter_type);
+        return null;
     }
 
     /**
+     * 利用可能としたいフィルタの型をまとめて配列で追加する
+     * Add available filter types in an array
      * 
      * @param array $filter_types
      */
     public function setFilterTypes(array $filter_types)
     {
-        /* TODO::Not Implemented  */
+        return array_map("self::setFilterType", $filter_types);
     }
 
     /**
@@ -238,7 +265,6 @@ class Request extends FundamentalPHP {
     {
         return function_exists("apache_request_headers") ? apache_request_headers() : [];
     }
-    
 
     /**
      * ページにアクセスするために指定されたURIを取得する
