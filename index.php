@@ -27,11 +27,9 @@ $extensions = [
 $loader = new Loader($dirs, $extensions);
 $loader->register();
 
-/*
-  $request = new Request(["GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS", "PATCH"]);
-  $request->setFilterTypes([FILTER_SANITIZE_STRIPPED, FILTER_SANITIZE_STRING]);
-  var_dump($request->getFilterTypeList());
- */
+
+$request = new Request(["GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS", "PATCH", "STREAM"]);
+$request->is("HEAD", "OPTIONS");
 
 $controller = new ApplicationController(true, "Mysqli");
 $controller->dispatch();
@@ -53,7 +51,7 @@ $article = $mysqli->getResource();
 <html>
     <head>
         <meta charset = "UTF-8">
-        <title>インストラクターDBMSVer0.4</title>
+        <title>{DATA.TITLE}</title>
         <link rel="stylesheet" href="web/normalize.css" type="text/css" media="all">
         <link rel="stylesheet" href="web/defaults.css" type="text/css" media="all">
 
@@ -139,7 +137,7 @@ $article = $mysqli->getResource();
     </head>
     <body>
         <section id="container">
-            <h1>インストラクターDBMSシステムVer0.4</h1>
+            <h1>{DATA.TITLE}</h1>
             <?php echo call_html_template("header"); ?>
             <?php echo call_html_template("form"); ?>
             <article class="content">

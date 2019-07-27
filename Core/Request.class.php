@@ -7,10 +7,6 @@
  * 
  * @category FundamentalPHP
  * @package  Core
- * @copyright
- * @link https://github.com/yumezouWebTeam/FundamentalPHP0.8.1
- * @link https://github.com/yumezouWebTeam/FundamentalPHP0.8.1/blob/master/Core/Request.class.php
- * @author tatsuya.osada
  */
 class Request extends FundamentalPHP {
 
@@ -25,15 +21,18 @@ class Request extends FundamentalPHP {
     public function __construct(array $forbiddenMethods = [])
     {
         $this->_http_methods = ["GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS", "PATCH"];
+
+        /**
+         * _forbiddenMethodsに指定されたパラメータ群のうち、HTTPメソッドでないものを省く
+         */
         $this->_forbiddenMethods = array_filter($forbiddenMethods, function ($forbiddenMethod) {
             return array_filter($this->_http_methods, function ($http_method) use($forbiddenMethod) {
                 return $http_method === $forbiddenMethod;
             });
         });
 
-
         /**
-         * 
+         * TODO::リクエストメソッドの値を受け付ける際の利用可能なフィルタリストを生成する
          */
         $this->_filterTypeList = array_merge([
             FILTER_SANITIZE_EMAIL,
@@ -45,25 +44,6 @@ class Request extends FundamentalPHP {
             FILTER_VALIDATE_EMAIL,
             FILTER_VALIDATE_IP,
                 ], array_map("strtoupper", filter_list()));
-    }
-
-    /**
-     * ページにアクセスする際に使用されたHTTPリクエストメソッドを総合的に判定する
-     * Comprehensively check the HTTP request method used to access the page
-     * 
-     * @param string $request_method
-     * @return boolean
-     * @throws MethodNotAllowedException
-     */
-    public function is($request_method)
-    {
-        if (in_array(strtoupper($request_method), $this->_forbiddenMethods))
-            throw new MethodNotAllowedException(strtoupper($request_method));
-        if ($request_method === "ssl")
-            return $this->isSsl();
-        if ($request_method === "ajax" || $request_method === "xmlhttprequest")
-            return $this->isXmlHttpRequest();
-        return strtoupper($_SERVER["REQUEST_METHOD"]) === strtoupper($request_method);
     }
 
     /**
@@ -109,163 +89,6 @@ class Request extends FundamentalPHP {
     public function getForbiddenMethods()
     {
         return (array) $this->_forbiddenMethods;
-    }
-
-    /**
-     * 禁止するHTTPリクエストメソッドをプロパティ設定する
-     * Set to Forbidden HTTP request method
-     * 
-     * @param type $method_name
-     * @return 
-     */
-    public function setForbiddenMethod($method_name)
-    {
-        if (!in_array(strtoupper($method_name), $this->_forbiddenMethods))
-            $this->_forbiddenMethods[] = $method_name;
-        return;
-    }
-
-    /**
-     * 禁止するHTTPリクエストメソッドを配列でまとめて設定する
-     * Set collectively Forbidden HTTP request methods in an array
-     * 
-     * @param array $methods
-     * @return array
-     */
-    public function setForbiddenMethods(array $methods)
-    {
-        return array_map("self::setForbiddenMethod", $methods);
-    }
-
-    /**
-     * このクラスで定義されているHTTPリクエストメソッドの一覧を配列で取得する
-     * Get list of defined HTTP request methods as array
-     * 
-     * @return array
-     */
-    public function getHttpMethods()
-    {
-        return (array) $this->_http_methods;
-    }
-
-    /**
-     * このクラスで定義されているHTTPリクエストメソッドに値を追加する
-     * Set value to HTTP request method defined in this class
-     * 
-     * @param string $method_name
-     */
-    public function setHttpMethod($method_name)
-    {
-        if (!in_array(strtoupper($method_name), $this->_http_methods))
-            $this->_http_methods[] = strtoupper($method_name);
-        return;
-    }
-
-    /**
-     * 
-     * @param array $http_method
-     */
-    public function setHttpMethods(array $http_method)
-    {
-        return array_map("self::setHttpMethod", $http_method);
-    }
-
-    /**
-     * 利用可能なフィルタの型を配列で取得する
-     * Get available filter types in array
-     * 
-     * @return array
-     */
-    public function getFilterTypeList()
-    {
-        return (array) $this->_filterTypeList;
-    }
-
-    /**
-     * 利用可能としたいフィルタの型を追加する
-     * Add the type of filter you want to make available
-     * 
-     * @param string $filter_type
-     */
-    public function setFilterType($filter_type)
-    {
-        if (!in_array(strtoupper($filter_type), $this->getFilterTypeList()))
-            $this->_filterTypeList[] = strtoupper($filter_type);
-        return null;
-    }
-
-    /**
-     * 利用可能としたいフィルタの型をまとめて配列で追加する
-     * Add available filter types in an array
-     * 
-     * @param array $filter_types
-     */
-    public function setFilterTypes(array $filter_types)
-    {
-        return array_map("self::setFilterType", $filter_types);
-    }
-
-    /**
-     * リクエストメソッドPOSTのパラメータをフィルタリングして取得する
-     * Filter and get the parameters of request method POST
-     * 
-     * @param string $name
-     * @param defined $__FILTER__
-     * @explain <pre>引数のフィルタ型はPHPで定義されているものに限る</pre>
-     * <pre>See below for available filter types</pre>
-     * @link https://www.php.net/manual/ja/filter.filters.php
-     * @return mixed
-     */
-    public function getPost($name, $__FILTER__ = FILTER_DEFAULT)
-    {
-        $__FILTER__ = in_array(strtoupper($__FILTER__), $this->getFilterTypeList()) ? strtoupper($__FILTER__) : FILTER_DEFAULT;
-        if (isset($_POST[$name]))
-            return function_exists("filter_input") ? filter_input(INPUT_POST, $name, $__FILTER__) : $_POST[$name];
-        return null;
-    }
-
-    /**
-     * リクエストメソッドGETのクエリパラメータをフィルタリングして取得する
-     * Filter and get the query parameter of request method GET
-     * 
-     * @param string $name
-     * @param defined $__FILTER__ 
-     * @explain <pre>引数のフィルタ型はPHPで定義されているものに限る</pre>
-     * <pre>See below for available filter types</pre>
-     * @link https://www.php.net/manual/ja/filter.filters.php
-     * @return mixed
-     */
-    public function getQuery($name, $__FILTER__ = FILTER_DEFAULT)
-    {
-        $__FILTER__ = in_array(strtoupper($__FILTER__), $this->getFilterTypeList()) ? strtoupper($__FILTER__) : FILTER_DEFAULT;
-        if (isset($_GET[$name]))
-            return function_exists("filter_input") ? filter_input(INPUT_GET, $name, $__FILTER__) : $_GET[$name];
-        return null;
-    }
-
-    /**
-     * 指定されたリクエストヘッダを取得する
-     * Get specified request header
-     * 
-     * @param nullable $name
-     * @return mixed
-     */
-    public function getHeader($name = null)
-    {
-        if (function_exists("apache_request_headers"))
-            return array_key_exists($name, apache_request_headers()) ? apache_request_headers()[$name] : null;
-        return null;
-    }
-
-    /**
-     * リクエストヘッダを配列で取得する
-     * Get request header in array
-     * 
-     * @return array
-     */
-    public function getHeaders()
-    {
-        return function_exists("apache_request_headers") ? apache_request_headers() : [];
     }
 
     /**

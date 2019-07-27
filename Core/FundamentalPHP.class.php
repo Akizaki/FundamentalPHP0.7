@@ -12,8 +12,7 @@
  * 
  * @category  FundamentalPHP
  * @package   Core
- * @copyright  
- * @author tatsuya.osada
+ * @copyright
  */
 abstract class FundamentalPHP {
 

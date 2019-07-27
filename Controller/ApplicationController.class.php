@@ -3,7 +3,6 @@
 /**
  * Description of ApplicationController
  *
- * @author tatsuya.osada
  */
 class ApplicationController extends Controller {
 

@@ -8,8 +8,7 @@
 
 /**
  * Description of Session
- *
- * @author tatsuya.osada
+
  */
 class Session {
 
